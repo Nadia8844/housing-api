@@ -6,6 +6,8 @@ from .views import (
     AffordabilityView,
     MarketSummaryView,
     RegisterView,
+    RegionListView,
+    RegionDetailView,
 )
 
 urlpatterns = [
@@ -15,4 +17,6 @@ urlpatterns = [
     path('analytics/affordability/', AffordabilityView.as_view(), name='affordability'),
     path('analytics/summary/', MarketSummaryView.as_view(), name='market-summary'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('regions/', RegionListView.as_view(), name='region-list'),
+    path('regions/<int:pk>/', RegionDetailView.as_view(), name='region-detail'),
 ]

@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Avg, Min, Max, Count
 from django.contrib.auth.models import User
-from .models import Listing
-from .serializers import ListingSerialiser
+from .models import Listing, Region
+from .serializers import ListingSerialiser, RegionSerialiser
 from decimal import Decimal
 
 
@@ -214,4 +214,76 @@ class RegisterView(APIView):
         return Response(
             {"message": f"User '{user.username}' registered successfully"},
             status=status.HTTP_201_CREATED
+        )
+    
+class RegionListView(APIView):
+    """
+    Handles listing all regions and creating a new region.
+    GET  /regions/     - Returns all UK regions
+    POST /regions/     - Creates a new region
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        regions = Region.objects.all()
+        serialiser = RegionSerialiser(regions, many=True)
+        return Response(serialiser.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serialiser = RegionSerialiser(data=request.data)
+        if serialiser.is_valid():
+            serialiser.save()
+            return Response(serialiser.data, status=status.HTTP_201_CREATED)
+        return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RegionDetailView(APIView):
+    """
+    Handles retrieving, updating and deleting a single region.
+    GET    /regions/<id>/  - Returns a single region
+    PUT    /regions/<id>/  - Updates a region
+    DELETE /regions/<id>/  - Deletes a region
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Region.objects.get(pk=pk)
+        except Region.DoesNotExist:
+            return None
+
+    def get(self, request, pk):
+        region = self.get_object(pk)
+        if region is None:
+            return Response(
+                {"error": "Region not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serialiser = RegionSerialiser(region)
+        return Response(serialiser.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        region = self.get_object(pk)
+        if region is None:
+            return Response(
+                {"error": "Region not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serialiser = RegionSerialiser(region, data=request.data)
+        if serialiser.is_valid():
+            serialiser.save()
+            return Response(serialiser.data, status=status.HTTP_200_OK)
+        return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        region = self.get_object(pk)
+        if region is None:
+            return Response(
+                {"error": "Region not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        region.delete()
+        return Response(
+            {"message": "Region successfully deleted"},
+            status=status.HTTP_204_NO_CONTENT
         )

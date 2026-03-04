@@ -14,3 +14,17 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.city}"
+    
+class Region(models.Model):
+    """
+    Represents a UK region with ONS salary and rental data.
+    Used for broader regional affordability analysis.
+    """
+    name = models.CharField(max_length=100, unique=True)
+    average_annual_salary = models.DecimalField(max_digits=10, decimal_places=2)
+    median_monthly_rent = models.DecimalField(max_digits=8, decimal_places=2)
+    population = models.IntegerField()
+    country = models.CharField(max_length=50, default='England')
+
+    def __str__(self):
+        return self.name

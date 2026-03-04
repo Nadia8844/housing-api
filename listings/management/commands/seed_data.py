@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from listings.models import Listing
+from listings.models import Listing, Region
 
 
 class Command(BaseCommand):
@@ -99,6 +99,51 @@ class Command(BaseCommand):
         for data in sample_listings:
             Listing.objects.create(**data)
             self.stdout.write(f"Created listing: {data['title']}")
+
+        # Seed UK regions with ONS data
+        Region.objects.all().delete()
+
+        sample_regions = [
+            {
+                'name': 'London',
+                'average_annual_salary': 44850.00,
+                'median_monthly_rent': 2000.00,
+                'population': 8799800,
+                'country': 'England',
+            },
+            {
+                'name': 'South East',
+                'average_annual_salary': 36000.00,
+                'median_monthly_rent': 1400.00,
+                'population': 9217265,
+                'country': 'England',
+            },
+            {
+                'name': 'Yorkshire and The Humber',
+                'average_annual_salary': 29500.00,
+                'median_monthly_rent': 800.00,
+                'population': 5502967,
+                'country': 'England',
+            },
+            {
+                'name': 'North West',
+                'average_annual_salary': 30200.00,
+                'median_monthly_rent': 850.00,
+                'population': 7417300,
+                'country': 'England',
+            },
+            {
+                'name': 'Scotland',
+                'average_annual_salary': 31500.00,
+                'median_monthly_rent': 950.00,
+                'population': 5479900,
+                'country': 'Scotland',
+            },
+        ]
+
+        for data in sample_regions:
+            Region.objects.create(**data)
+            self.stdout.write(f"Created region: {data['name']}")
 
         self.stdout.write(self.style.SUCCESS(
             f'Successfully seeded {len(sample_listings)} listings'
