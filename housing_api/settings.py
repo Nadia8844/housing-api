@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-geq&=$)-k-lv8#)6m7$zi3#(@hu@5*0b+$%_mt(l)2(sayx*fn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['Nadia8844.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
