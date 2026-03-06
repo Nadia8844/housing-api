@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Avg, Min, Max, Count
+from django.contrib.auth.models import User
 from .models import Listing
 from .serializers import ListingSerialiser
 from decimal import Decimal
@@ -185,3 +186,31 @@ class MarketSummaryView(APIView):
         }
 
         return Response(summary, status=status.HTTP_200_OK)
+    
+class RegisterView(APIView):
+    """
+    Allows new users to register an account.
+    POST /api/register/
+    """
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response(
+                {"error": "Username and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if User.objects.filter(username=username).exists():
+            return Response(
+                {"error": "Username already exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = User.objects.create_user(username=username, password=password)
+        return Response(
+            {"message": f"User '{user.username}' registered successfully"},
+            status=status.HTTP_201_CREATED
+        )

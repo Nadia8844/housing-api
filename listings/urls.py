@@ -5,6 +5,7 @@ from .views import (
     AverageRentByCityView,
     AffordabilityView,
     MarketSummaryView,
+    RegisterView,
 )
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path('analytics/average-rent/', AverageRentByCityView.as_view(), name='average-rent'),
     path('analytics/affordability/', AffordabilityView.as_view(), name='affordability'),
     path('analytics/summary/', MarketSummaryView.as_view(), name='market-summary'),
+    path('register/', RegisterView.as_view(), name='register'),
 ]
