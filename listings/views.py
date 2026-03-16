@@ -2,8 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.db.models import Avg, Min, Max, Count
 from .models import Listing
 from .serializers import ListingSerialiser
+from decimal import Decimal
 
 
 class ListingListView(APIView):
@@ -102,3 +104,84 @@ class ListingDetailView(APIView):
             {"message": "Listing successfully deleted"},
             status=status.HTTP_204_NO_CONTENT
         )
+    
+class AverageRentByCityView(APIView):
+    """
+    Analytics endpoint returning average monthly rent per city.
+    GET /api/analytics/average-rent/
+    """
+
+    def get(self, request):
+        results = (
+            Listing.objects
+            .values('city')
+            .annotate(
+                average_rent=Avg('monthly_rent'),
+                total_listings=Count('id'),
+                min_rent=Min('monthly_rent'),
+                max_rent=Max('monthly_rent'),
+            )
+            .order_by('city')
+        )
+        return Response(results, status=status.HTTP_200_OK)
+
+
+class AffordabilityView(APIView):
+    """
+    Analytics endpoint returning an affordability index per city.
+    Affordability is calculated as average rent as a percentage
+    of the UK median monthly salary (£2,500).
+    GET /api/analytics/affordability/
+    """
+    # UK median monthly take-home salary estimate
+    UK_MEDIAN_MONTHLY_SALARY = Decimal('2500.00')
+
+    def get(self, request):
+        cities = (
+            Listing.objects
+            .values('city')
+            .annotate(average_rent=Avg('monthly_rent'))
+            .order_by('city')
+        )
+
+        results = []
+        for city in cities:
+            affordability_index = round(
+                (city['average_rent'] / self.UK_MEDIAN_MONTHLY_SALARY) * 100, 2
+            )
+            results.append({
+                'city': city['city'],
+                'average_rent': round(city['average_rent'], 2),
+                'affordability_index': affordability_index,
+                'affordability_rating': (
+                    'affordable' if affordability_index < 30
+                    else 'moderate' if affordability_index < 40
+                    else 'expensive'
+                ),
+            })
+
+        return Response(results, status=status.HTTP_200_OK)
+
+
+class MarketSummaryView(APIView):
+    """
+    Analytics endpoint returning an overall summary of the housing market.
+    GET /api/analytics/summary/
+    """
+
+    def get(self, request):
+        total_listings = Listing.objects.count()
+        available_listings = Listing.objects.filter(available=True).count()
+        overall_avg_rent = Listing.objects.aggregate(
+            avg=Avg('monthly_rent')
+        )['avg']
+
+        summary = {
+            'total_listings': total_listings,
+            'available_listings': available_listings,
+            'unavailable_listings': total_listings - available_listings,
+            'overall_average_rent': round(overall_avg_rent, 2),
+            'cities_covered': Listing.objects.values('city').distinct().count(),
+        }
+
+        return Response(summary, status=status.HTTP_200_OK)
