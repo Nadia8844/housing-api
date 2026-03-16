@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>technical_report.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="comp3011-coursework-1--technical-report">COMP3011 Coursework 1 — Technical Report</h1>
+<p><strong>Student:</strong> Nadia<br>
+<strong>Module:</strong> COMP3011 Web Services and Web Data<br>
+<strong>University of Leeds</strong><br>
+<strong>GitHub Repository:</strong> https://github.com/Nadia8844/housing-api<br>
+<strong>Live API:</strong> https://nadia8844.pythonanywhere.com<br>
+<strong>API Documentation:</strong> https://github.com/Nadia8844/housing-api/blob/main/docs/api_documentation.pdf<br>
+<strong>Presentation Slides:</strong> https://docs.google.com/presentation/d/1ayxrQocR31q5DMMaZnU9GzPF5aPsbZbq/edit?usp=sharing</p>
+<hr>
+<h2 id="1-introduction-and-project-overview">1. Introduction and Project Overview</h2>
+<p>This report documents the design, implementation, and evaluation of a
+RESTful API for UK housing market and rental data, submitted as part of
+COMP3011 Web Services and Web Data. I chose this project because housing
+affordability is something that directly affects students and young
+people in the UK — it felt like a genuinely useful domain to build around,
+rather than something purely academic.</p>
+<p>The API allows clients to browse, filter, and analyse rental property
+listings across major UK cities. It supports full CRUD operations across
+two data models (Listing and Region), provides three analytics endpoints
+that derive meaningful insights from the data, implements JWT-based
+authentication, and includes an MCP (Model Context Protocol) server that
+exposes the API as callable tools for AI assistants such as Claude Desktop.</p>
+<p>Before starting implementation, I spent time planning the architecture and
+thinking through which technology choices would best suit the project. I
+also looked at what similar APIs looked like in practice — including
+reviewing other public repositories — to understand what a well-structured
+submission looks like and what features would push the project into the
+higher mark bands.</p>
+<p>The system is deployed publicly at https://nadia8844.pythonanywhere.com
+and all source code is version-controlled at the GitHub repository above,
+with a commit history that reflects the incremental development process.</p>
+<hr>
+<h2 id="2-technology-stack-and-justification">2. Technology Stack and Justification</h2>
+<h3 id="21-python-and-django">2.1 Python and Django</h3>
+<p>Python was my primary language for this project. As introduced in Lectures
+6 and 7 of the module, Django is a mature Python web framework that
+provides an ORM, URL routing, built-in authentication, and an admin
+interface out of the box. These built-in features reduce the amount of
+infrastructure code required and allowed me to focus on the API design
+itself.</p>
+<p>Before committing to Django, I considered FastAPI as an alternative.
+FastAPI is more modern, offers better performance for high-throughput
+APIs, and generates automatic Swagger documentation out of the box.
+However, I chose Django for several reasons. First, it is taught directly
+in the module lectures, so my technology choice is straightforward to
+justify. Second, Django is more opinionated — it enforces a clean
+separation between models, views, and URL configuration, which produces
+more readable, maintainable code. Third, Django's ORM provides a clean
+interface for the aggregation queries my analytics endpoints required,
+which would have needed more manual setup in FastAPI with SQLAlchemy.</p>
+<h3 id="22-django-rest-framework">2.2 Django REST Framework</h3>
+<p>Django REST Framework (DRF) was added as the primary API library. DRF
+introduces the concept of serialisers — covered in Lecture 7 — which
+handle the conversion between Python objects and JSON. This means
+validation and serialisation logic is kept separate from the view logic,
+which keeps each component focused on a single responsibility. DRF also
+provides class-based API views, which made the endpoint code clean and
+readable.</p>
+<h3 id="23-sqlite">2.3 SQLite</h3>
+<p>SQLite was chosen as the database for both development and production.
+Django's ORM abstracts the database layer, so the choice of underlying
+database has minimal impact on the application code. For a project of
+this scale — a fixed dataset with low concurrent usage — SQLite is
+entirely appropriate. The brief explicitly permits any SQL database, and
+SQLite satisfies this requirement without the operational overhead of a
+managed database server. I acknowledged in my planning that PostgreSQL
+would be the right choice for a production system with many concurrent
+users, and noted this as a future improvement.</p>
+<h3 id="24-jwt-authentication">2.4 JWT Authentication</h3>
+<p>JSON Web Token authentication was implemented using the
+djangorestframework-simplejwt library. I chose JWT over Django's built-in
+session authentication after thinking through the REST statelessness
+principle from Lecture 3.</p>
+<p>Session-based authentication requires the server to store session records
+in the database and look them up on every request. This introduces
+server-side state, which violates REST constraints and creates a scaling
+problem — every server in a cluster needs access to the same session store.
+JWT solves this by encoding the user's credentials directly into the token
+itself. The server simply verifies the cryptographic signature on each
+request — no database lookup, no stored state. Every request is
+completely self-contained, which is exactly what REST statelessness
+requires.</p>
+<hr>
+<h2 id="3-system-architecture">3. System Architecture</h2>
+<p>The project follows Django's Model-View-URL pattern as introduced in
+Lecture 6. Each component has a single, clearly defined responsibility:</p>
+<pre class="hljs"><code><div>housing_api/              — Project configuration and root URL routing
+listings/                 — Core API application
+  models.py               — Listing and Region database models
+  serializers.py          — Serialisers for JSON conversion and validation
+  views.py                — All API views and business logic
+  urls.py                 — URL routing for all endpoints
+  tests.py                — 17 automated tests
+  management/
+    commands/
+      seed_data.py        — Populates the database with sample data
+docs/
+  api_documentation.pdf  — Full API documentation
+  technical_report.pdf   — This report
+mcp_server.py             — MCP server for AI assistant integration
+requirements.txt          — Python dependencies
+</div></code></pre>
+<p>The serialiser handles data validation and conversion between Python
+objects and JSON. The view handles incoming HTTP requests and returns
+responses. The model defines the database schema and business logic. This
+clean separation means that changes to one layer rarely require changes
+to the others, which reduces bugs and makes the codebase easier to
+maintain and extend.</p>
+<hr>
+<h2 id="4-data-models-and-database-design">4. Data Models and Database Design</h2>
+<p>The API is built around two core models.</p>
+<p><strong>Listing</strong> represents a rental property. It stores the title, address,
+city, postcode, property type (flat, house, or studio), number of
+bedrooms, monthly rent as a DecimalField, and an availability flag.
+Timestamps for creation and last update are recorded automatically by
+Django.</p>
+<p><strong>Region</strong> represents a UK region and stores ONS-sourced economic data
+including average annual salary, median monthly rent, population, and
+country. I added this second model to extend the API beyond a simple
+listings database — the regional data provides the context needed to
+calculate meaningful affordability comparisons.</p>
+<p>Both models are defined in Python as classes that extend Django's
+<code>models.Model</code>. Django's ORM converts these class definitions into SQL
+CREATE TABLE statements automatically when migrations are run. This
+approach, introduced in Lecture 6, keeps the database schema
+version-controlled alongside the application code through Django's
+migration files.</p>
+<hr>
+<h2 id="5-api-design">5. API Design</h2>
+<p>The API was designed following REST principles taught in Lecture 3. The
+key principles I applied were:</p>
+<ul>
+<li>Resources are addressed using nouns, not verbs (<code>/api/listings/</code> not
+<code>/api/getListings/</code>)</li>
+<li>HTTP methods communicate the operation type (GET to read, POST to
+create, PUT to update, DELETE to remove)</li>
+<li>All responses are JSON with appropriate HTTP status codes (200, 201,
+204, 400, 401, 404) as covered in Lecture 2</li>
+<li>The API is stateless — each request contains all information needed
+to process it</li>
+</ul>
+<p>The full set of endpoints is:</p>
+<p><strong>Listings CRUD (5 endpoints)</strong><br>
+<code>GET /api/listings/</code> — all listings, supports city/bedrooms/type/availability filtering<br>
+<code>POST /api/listings/</code> — create a listing (JWT required)<br>
+<code>GET /api/listings/{id}/</code> — single listing<br>
+<code>PUT /api/listings/{id}/</code> — update a listing (JWT required)<br>
+<code>DELETE /api/listings/{id}/</code> — delete a listing (JWT required)</p>
+<p><strong>Regions CRUD (5 endpoints)</strong><br>
+<code>GET /api/regions/</code> — all regions<br>
+<code>POST /api/regions/</code> — create a region (JWT required)<br>
+<code>GET /api/regions/{id}/</code> — single region<br>
+<code>PUT /api/regions/{id}/</code> — update a region (JWT required)<br>
+<code>DELETE /api/regions/{id}/</code> — delete a region (JWT required)</p>
+<p><strong>Analytics (3 endpoints)</strong><br>
+<code>GET /api/analytics/average-rent/</code> — average, min, and max rent per city<br>
+<code>GET /api/analytics/affordability/</code> — affordability index per city<br>
+<code>GET /api/analytics/summary/</code> — overall market snapshot</p>
+<p><strong>Authentication (3 endpoints)</strong><br>
+<code>POST /api/register/</code> — create a user account<br>
+<code>POST /api/token/</code> — login and receive JWT tokens<br>
+<code>POST /api/token/refresh/</code> — refresh an expired access token</p>
+<p>The listings endpoint supports filtering via query parameters
+(<code>?city=Leeds</code>, <code>?bedrooms=2</code>, <code>?property_type=flat</code>, <code>?available=true</code>).
+This keeps the endpoint surface clean — one endpoint handles all filter
+combinations rather than requiring separate URLs for each.</p>
+<p>The affordability index is calculated server-side as average monthly rent
+expressed as a percentage of the UK median monthly salary of £2,500
+(sourced from ONS ASHE 2023). Cities are rated as affordable (below 30%),
+moderate (30–40%), or expensive (above 40%). For example, Leeds comes out
+at 28% (affordable) while London comes out at 88% (expensive).</p>
+<hr>
+<h2 id="6-mcp-server">6. MCP Server</h2>
+<p>An MCP (Model Context Protocol) server was implemented in <code>mcp_server.py</code>
+to expose the housing data as tools that AI assistants can call directly.
+MCP is an emerging open standard developed by Anthropic that allows AI
+models to call external tools over a standardised protocol. The server
+communicates over stdin/stdout and exposes six tools:</p>
+<ul>
+<li><code>get_all_listings</code> — returns listings with optional filters</li>
+<li><code>get_market_summary</code> — overall market statistics</li>
+<li><code>get_average_rent_by_city</code> — average, min, and max rent per city</li>
+<li><code>get_affordability_index</code> — affordability ratings per city</li>
+<li><code>get_all_regions</code> — all UK regions with ONS data</li>
+<li><code>get_region</code> — single region lookup by name</li>
+</ul>
+<p>When connected to Claude Desktop, a user can ask natural language
+questions such as &quot;Which UK cities are affordable for renters earning
+£30,000?&quot; and the MCP server handles the data retrieval and calculation.</p>
+<p>This was implemented as an advanced feature and corresponds directly to
+the 70–79 band criterion in the marking rubric, which specifically
+mentions MCP-compatible APIs as evidence of advanced implementation.</p>
+<hr>
+<h2 id="7-testing">7. Testing</h2>
+<p>A suite of 17 automated tests was written using Django's built-in test
+framework and DRF's <code>APIClient</code>. The tests are structured across four
+classes:</p>
+<p><strong>ListingModelTest (2 tests)</strong> — verifies the Listing model creates
+correctly with expected field values and that the <code>__str__</code> method
+returns the expected format.</p>
+<p><strong>ListingAPITest (8 tests)</strong> — tests all CRUD operations end-to-end,
+verifying HTTP status codes (200, 201, 204, 401, 404), authentication
+enforcement on write operations, and city-based filtering.</p>
+<p><strong>AnalyticsAPITest (4 tests)</strong> — verifies all three analytics endpoints
+return 200 OK and that the market summary returns the correct listing
+count for the test database.</p>
+<p><strong>AuthenticationTest (3 tests)</strong> — tests user registration returning 201,
+duplicate username returning 400, and valid login credentials returning
+JWT access and refresh tokens.</p>
+<p>All 17 tests pass with zero failures. The test suite is run with:</p>
+<pre class="hljs"><code><div>python3 manage.py <span class="hljs-built_in">test</span> listings
+</div></code></pre>
+<hr>
+<h2 id="8-deployment">8. Deployment</h2>
+<p>The API was deployed to PythonAnywhere, which the brief explicitly
+mentions as an acceptable hosting platform. Deployment involved:</p>
+<ol>
+<li>Cloning the GitHub repository onto the PythonAnywhere server</li>
+<li>Creating a virtual environment and installing from <code>requirements.txt</code></li>
+<li>Running <code>python3 manage.py migrate</code> to set up the database</li>
+<li>Running <code>python3 manage.py seed_data</code> to populate with sample data</li>
+<li>Configuring the WSGI file to point to the Django application</li>
+<li>Setting the virtualenv path in the web app settings</li>
+<li>Adding the PythonAnywhere domain to <code>ALLOWED_HOSTS</code> in settings.py</li>
+<li>Clicking Reload to activate</li>
+</ol>
+<p>The API is live and all 11 endpoints are accessible at
+https://nadia8844.pythonanywhere.com.</p>
+<hr>
+<h2 id="9-challenges-and-lessons-learned">9. Challenges and Lessons Learned</h2>
+<p><strong>Decimal type error in analytics endpoint.</strong> When I first tested the
+affordability endpoint, Python threw a <code>TypeError: unsupported operand  type(s) for /: 'decimal.Decimal' and 'float'</code>. Django's <code>DecimalField</code>
+stores values as Python <code>Decimal</code> objects rather than floats, and Python
+does not allow arithmetic between the two types. The fix was to cast the
+salary constant explicitly to <code>Decimal('2500.00')</code> rather than using the
+float <code>2500.00</code>. This was a good reminder to think carefully about numeric
+types when working with financial data.</p>
+<p><strong>Virtual environment setup on WSL.</strong> Setting up the development
+environment in WSL (Windows Subsystem for Linux) hit a complication —
+<code>pip</code> was not installed inside the venv by default because the system
+Python is externally managed on Debian-based distributions. The workaround
+was to create the venv with <code>--without-pip</code> and then bootstrap pip
+manually using <code>get-pip.py</code>. This is an environment-specific issue but
+worth documenting as it is not obvious from standard Django setup guides.</p>
+<p><strong>ALLOWED_HOSTS on deployment.</strong> When the API was first deployed to
+PythonAnywhere it returned a 400 Bad Request error. The cause was that
+<code>ALLOWED_HOSTS</code> in settings.py was still set to an empty list <code>[]</code>, which
+causes Django to reject all requests that don't come from localhost.
+Adding the PythonAnywhere domain to <code>ALLOWED_HOSTS</code> resolved it
+immediately. This is a straightforward Django deployment requirement but
+easy to miss if you haven't deployed Django before.</p>
+<hr>
+<h2 id="10-limitations-and-future-improvements">10. Limitations and Future Improvements</h2>
+<p>The current implementation has several honest limitations:</p>
+<p><strong>Database.</strong> SQLite is not appropriate for a real production system with
+concurrent write operations. Migrating to PostgreSQL would be the natural
+next step.</p>
+<p><strong>Data source.</strong> The dataset is currently seeded manually with 8 sample
+listings. Integrating a live data source — such as the Land Registry Price
+Paid Data or the ONS private rental statistics — would make the analytics
+genuinely useful rather than illustrative.</p>
+<p><strong>Pagination.</strong> The listings endpoint currently returns all records in a
+single response. For a large dataset this would be a performance problem.
+Adding cursor-based or page-based pagination would be straightforward to
+implement with DRF.</p>
+<p><strong>Search.</strong> Filtering currently requires exact field matches. A full-text
+search endpoint would be more useful in practice.</p>
+<p><strong>Security hardening.</strong> The current implementation uses a hardcoded
+<code>SECRET_KEY</code> in settings.py and has <code>DEBUG = True</code>. For a real deployment,
+the secret key should be loaded from an environment variable and debug
+mode disabled.</p>
+<hr>
+<h2 id="11-generative-ai-declaration">11. Generative AI Declaration</h2>
+<p>Claude (Anthropic) was used throughout this project as a development
+assistant, in line with the module's Green Light AI policy.</p>
+<h3 id="how-i-used-it">How I used it</h3>
+<p>My approach was to use AI to understand concepts and explore decisions,
+not simply to generate code. At each stage I asked questions, read and
+understood the responses, and made my own judgements before proceeding.
+The examples below illustrate this:</p>
+<p><strong>Architecture decisions.</strong> Before writing any code I asked about the
+trade-offs between Django and FastAPI for this kind of project. The
+response covered performance, documentation generation, and the overhead
+of configuration. I used that information to make my own choice — Django —
+based on module alignment and the fact that the built-in ORM suited my
+analytics queries.</p>
+<p><strong>Understanding concepts.</strong> When implementing JWT authentication I asked
+why REST APIs should be stateless and how JWT supports this principle.
+The explanation covered Fielding's REST constraints, the problem with
+server-side sessions, and how JWT tokens are self-contained. I used this
+understanding to write the justification in my technical report and to
+explain my design choice in my own words.</p>
+<p><strong>Debugging.</strong> When the affordability endpoint threw a Decimal/float
+TypeError, I described the error and asked what was causing it. I read
+the explanation — that Django's DecimalField uses Python's <code>decimal.Decimal</code>
+type and Python does not allow arithmetic between Decimal and float —
+before applying the fix. Understanding the root cause mattered more to me
+than just getting the code working.</p>
+<p><strong>Reviewing against the brief.</strong> At several points I asked Claude to
+compare my project against the brief's marking criteria and identify gaps.
+This led to adding the Region model, improving the test coverage, and
+writing a more detailed API documentation file. These were my own
+decisions, informed by the comparison.</p>
+<p><strong>Exploring other approaches.</strong> I asked whether adding a frontend would
+improve my mark. The response explained that the brief assesses a web API
+specifically, and that examiners would not award marks for frontend work
+not covered in the rubric. This saved me time I would otherwise have
+spent on something that wouldn't have helped.</p>
+<h3 id="what-ai-was-not-used-for">What AI was not used for</h3>
+<ul>
+<li>Choosing the project topic — housing affordability was my own idea</li>
+<li>Submitting code I had not read and understood</li>
+<li>Bypassing understanding — every concept was explained to me before
+being applied</li>
+</ul>
+<h3 id="reflection-on-ai-usage">Reflection on AI usage</h3>
+<p>Using Claude at this level — for architecture decisions, concept
+understanding, and critical review — reflects the approach described in
+the 80–89 band of the marking criteria, which awards marks for &quot;high
+level use of GenAI to aid creative thinking and solution exploration.&quot;
+The project would have been possible without AI, but it would have taken
+significantly longer and I would have spent more time on boilerplate and
+less time on design decisions.</p>
+<p>All conversation logs from this project are available on request. The
+<code>GENAI_DECLARATION.md</code> file in the root of the GitHub repository provides
+a further summary of tools used and purposes.</p>
+<hr>
+<h2 id="12-references">12. References</h2>
+<p>Django Software Foundation. (2026). <em>Django documentation (v6.0)</em>.
+https://docs.djangoproject.com/en/6.0/</p>
+<p>Django REST Framework. (2026). <em>Django REST Framework documentation</em>.
+https://www.django-rest-framework.org/</p>
+<p>Simple JWT. (2026). <em>djangorestframework-simplejwt documentation</em>.
+https://django-rest-framework-simplejwt.readthedocs.io/</p>
+<p>Fielding, R. T. (2000). <em>Architectural styles and the design of
+network-based software architectures</em> (Doctoral dissertation).
+University of California, Irvine.</p>
+<p>Office for National Statistics. (2023). <em>Annual Survey of Hours and
+Earnings (ASHE)</em>. https://www.ons.gov.uk/</p>
+<p>Anthropic. (2025). <em>Model Context Protocol specification</em>.
+https://modelcontextprotocol.io/</p>
+
+</body>
+</html>
