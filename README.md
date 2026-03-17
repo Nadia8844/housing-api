@@ -106,7 +106,8 @@ Authorization: Bearer <your_access_token>
 
 ## API Documentation
 
-Full API documentation is available in `docs/api_documentation.pdf` in this repository.
+Full API documentation is available as a PDF in this repository:
+[View API Documentation](docs/api_documentation.pdf)
 
 ## Running Tests
 ```bash
