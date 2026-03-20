@@ -9,13 +9,38 @@ from .serializers import ListingSerialiser
 class ListingListView(APIView):
     """
     Handles listing all properties and creating a new property.
-    GET  /listings/     - Returns all property listings
-    POST /listings/     - Creates a new property listing
+    GET  /listings/                        - Returns all property listings
+    GET  /listings/?city=Leeds             - Filter by city
+    GET  /listings/?bedrooms=2             - Filter by number of bedrooms
+    GET  /listings/?property_type=flat     - Filter by property type
+    GET  /listings/?available=true         - Filter by availability
+    POST /listings/                        - Creates a new property listing
     """
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         listings = Listing.objects.all()
+
+        # Filter by city if provided
+        city = request.query_params.get('city')
+        if city:
+            listings = listings.filter(city__icontains=city)
+
+        # Filter by number of bedrooms if provided
+        bedrooms = request.query_params.get('bedrooms')
+        if bedrooms:
+            listings = listings.filter(bedrooms=bedrooms)
+
+        # Filter by property type if provided
+        property_type = request.query_params.get('property_type')
+        if property_type:
+            listings = listings.filter(property_type__icontains=property_type)
+
+        # Filter by availability if provided
+        available = request.query_params.get('available')
+        if available is not None:
+            listings = listings.filter(available=available.lower() == 'true')
+
         serialiser = ListingSerialiser(listings, many=True)
         return Response(serialiser.data, status=status.HTTP_200_OK)
 
