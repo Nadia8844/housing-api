@@ -192,6 +192,7 @@ class RegisterView(APIView):
     Allows new users to register an account.
     POST /api/register/
     """
+    permission_classes = []
 
     def post(self, request):
         username = request.data.get('username')
